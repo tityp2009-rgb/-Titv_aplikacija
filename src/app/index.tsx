@@ -1,0 +1,101 @@
+import * as Device from 'expo-device';
+import { Image, Platform, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import MojaSlika from '@/slike/TitV_slika.jpg';
+import { HintRow } from '@/components/hint-row';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { WebBadge } from '@/components/web-badge';
+import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+
+function getDevMenuHint() {
+  if (Platform.OS === 'web') {
+    return <ThemedText type="small">Florjan</ThemedText>;
+  }
+  if (Device.isDevice) {
+    return (
+      <ThemedText type="small">
+        shake device or press <ThemedText type="code">m</ThemedText> in terminal
+      </ThemedText>
+    );
+  }
+  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  return (
+    <ThemedText type="small">
+      press <ThemedText type="code">{shortcut}</ThemedText>
+    </ThemedText>
+  );
+}
+
+export default function HomeScreen() {
+  return (
+    <ThemedView style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <ThemedView style={styles.heroSection}>
+          <Image 
+			source={MojaSlika} 
+			style={{ width: 220, height: 200, resizeMode: 'contain' }} 
+		  />	
+          <ThemedText type="title" style={styles.title}>
+            Moja spletna &nbsp;stran
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedText type="code" style={styles.code}>
+          get started
+        </ThemedText>
+
+        <ThemedView type="backgroundElement" style={styles.stepContainer}>
+          <HintRow
+            title="Ime:"
+            hint={<ThemedText type="ime">Tit Vertacnik</ThemedText>}
+          />
+          <HintRow title="Bivalisce" hint={getDevMenuHint()} />
+          <HintRow
+            title="starost"
+            hint={<ThemedText type="starost"> 17 let</ThemedText>}
+          />
+        </ThemedView>
+
+        {Platform.OS === 'web' && <WebBadge />}
+      </SafeAreaView>
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  safeArea: {
+    flex: 1,
+    paddingHorizontal: Spacing.four,
+    alignItems: 'center',
+    gap: Spacing.three,
+    paddingBottom: BottomTabInset + Spacing.three,
+    maxWidth: MaxContentWidth,
+  },
+  heroSection: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    paddingHorizontal: Spacing.four,
+    gap: Spacing.four,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  code: {
+    textTransform: 'uppercase',
+  },
+  stepContainer: {
+    gap: Spacing.three,
+    alignSelf: 'stretch',
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.four,
+    borderRadius: Spacing.four,
+  },
+});
